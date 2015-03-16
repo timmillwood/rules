@@ -22,7 +22,7 @@ trait RulesExpressionTrait {
    */
   public function execute() {
     $contexts = $this->getContexts();
-    $state = new RulesState($contexts);
+    $state = new ExecutionState($contexts);
     $this->executeWithState($state);
     // Save specifically registered variables in the end after execution.
     $state->autoSave();

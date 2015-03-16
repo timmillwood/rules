@@ -8,7 +8,7 @@
 namespace Drupal\rules\Plugin\RulesExpression;
 
 use Drupal\rules\Engine\ConditionExpressionContainer;
-use Drupal\rules\Engine\RulesState;
+use Drupal\rules\Engine\ExecutionState;
 
 /**
  * Evaluates a group of conditions with a logical AND.
@@ -23,7 +23,7 @@ class RulesAnd extends ConditionExpressionContainer {
   /**
    * {@inheritdoc}
    */
-  public function executeWithState(RulesState $state) {
+  public function executeWithState(ExecutionState $state) {
     foreach ($this->conditions as $condition) {
       if (!$condition->executeWithState($state)) {
         return FALSE;
@@ -39,7 +39,7 @@ class RulesAnd extends ConditionExpressionContainer {
    */
   public function evaluate() {
     $contexts = $this->getContexts();
-    $state = new RulesState($contexts);
+    $state = new ExecutionState($contexts);
     return $this->executeWithState($state);
   }
 

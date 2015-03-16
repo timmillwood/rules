@@ -7,6 +7,8 @@
 
 namespace Drupal\rules\Tests;
 
+use Drupal\Core\Plugin\Context\ContextDefinition;
+use Drupal\rules\Engine\ExecutionStateDefinition;
 use Drupal\rules\Engine\RulesLog;
 
 /**
@@ -107,20 +109,15 @@ class ConfigEntityTest extends RulesDrupalTestBase {
    * Make sure that expressions using context definitions can be exported.
    */
   public function testContextDefinitionExport() {
-    $rule = $this->expressionManager->createRule([
-      'context_definitions' => [
-        'test' => [
-          'type' => 'string',
-          'label' => 'Test string',
-        ],
-      ],
-    ]);
+    $rule = $this->expressionManager->createRule(ExecutionStateDefinition::create()
+      ->setContextDefinition('test', ContextDefinition::create('string')));
 
     $config_entity = $this->storage->create([
       'id' => 'test_rule',
       'expression_id' => 'rules_rule',
       'configuration' => $rule->getConfiguration(),
     ]);
+    debug($rule->getConfiguration());
     $config_entity->save();
 
     $loaded_entity = $this->storage->load('test_rule');

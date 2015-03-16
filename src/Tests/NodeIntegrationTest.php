@@ -7,7 +7,9 @@
 
 namespace Drupal\rules\Tests;
 
+use Drupal\Core\Plugin\Context\ContextDefinition;
 use Drupal\rules\Context\ContextConfig;
+use Drupal\rules\Engine\ExecutionStateDefinition;
 use Drupal\rules\Engine\RulesLog;
 
 /**
@@ -63,14 +65,10 @@ class NodeIntegrationTest extends RulesDrupalTestBase {
     $user->save();
     $node->setOwner($user);
 
-    $rule = $this->expressionManager->createRule([
-      'context_definitions' => [
-        'node' => [
-          'type' => 'entity:node',
-          'label' => 'Node',
-        ],
-      ],
-    ]);
+    $rule = $this->expressionManager->createRule(ExecutionStateDefinition::create()
+      ->setContextDefinition('node', ContextDefinition::create('entity:node')
+        ->setLabel('Node')
+    ));
 
     // Test that the long detailed data selector works.
     $rule->addCondition('rules_test_string_condition', ContextConfig::create()
@@ -109,20 +107,7 @@ class NodeIntegrationTest extends RulesDrupalTestBase {
     // We use the rules_test_node action plugin which marks its node context for
     // auto saving.
     // @see \Drupal\rules_test\Plugin\Action\TestNodeAction
-    $action = $this->expressionManager->createAction('rules_test_node', [
-      'context_definitions' => [
-        'node' => [
-          'type' => 'entity:node',
-          'label' => 'Node',
-        ],
-        'title' => [
-          'type' => 'string',
-          'label' => 'Title',
-        ],
-      ],
-      // We don't need a context mapping here, the action will just pick the
-      // contexts with the same names.
-    ]);
+    $action = $this->expressionManager->createAction('rules_test_node');
 
     $action->setContextValue('node', $node);
     $action->setContextValue('title', 'new title');

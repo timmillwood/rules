@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains \Drupal\rules\Engine\RulesState.
+ * Contains \Drupal\rules\Engine\ExecutionState.
  */
 
 namespace Drupal\rules\Engine;
@@ -22,7 +22,7 @@ use Drupal\rules\Exception\RulesEvaluationException;
  * A rule element may clone the state, so any added variables are only visible
  * for elements in the current PHP-variable-scope.
  */
-class RulesState {
+class ExecutionState {
 
   /**
    * Globally keeps the ids of rules blocked due to recursion prevention.
@@ -51,7 +51,7 @@ class RulesState {
   protected $currentlyBlocked;
 
   /**
-   * Creates a new RulesState object.
+   * Creates a new ExecutionState object.
    *
    * @param \Drupal\Core\Plugin\Context\ContextInterface[] $contexts
    *   Context variables to initialize this state with (optional).

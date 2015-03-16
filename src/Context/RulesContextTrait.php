@@ -12,7 +12,7 @@ use Drupal\Component\Plugin\Exception\ContextException;
 use Drupal\Component\Utility\String;
 use Drupal\Core\Plugin\Context\Context;
 use Drupal\rules\Exception\RulesEvaluationException;
-use Drupal\rules\Engine\RulesState;
+use Drupal\rules\Engine\ExecutionState;
 
 /**
  * Offers common methods for context plugin implementers.
@@ -76,13 +76,13 @@ trait RulesContextTrait {
    *
    * @param \Drupal\Component\Plugin\ContextAwarePluginInterface $plugin
    *   The plugin that is populated with context values.
-   * @param \Drupal\rules\Engine\RulesState $state
+   * @param \Drupal\rules\Engine\ExecutionState $state
    *   The Rules state containing available variables.
    *
    * @throws \Drupal\rules\Exception\RulesEvaluationException
    *   In case a required context is missing for the plugin.
    */
-  protected function mapContext(ContextAwarePluginInterface $plugin, RulesState $state) {
+  protected function mapContext(ContextAwarePluginInterface $plugin, ExecutionState $state) {
     $context_definitions = $plugin->getContextDefinitions();
     foreach ($context_definitions as $name => $definition) {
       $context_value = NULL;
@@ -117,10 +117,10 @@ trait RulesContextTrait {
    *
    * @param ProvidedContextPluginInterface $plugin
    *   The plugin where the context values are extracted.
-   * @param \Drupal\rules\Engine\RulesState $state
+   * @param \Drupal\rules\Engine\ExecutionState $state
    *   The Rules state where the context variables are added.
    */
-  protected function mapProvidedContext(ProvidedContextPluginInterface $plugin, RulesState $state) {
+  protected function mapProvidedContext(ProvidedContextPluginInterface $plugin, ExecutionState $state) {
     $provides = $plugin->getProvidedDefinitions();
     foreach ($provides as $name => $provided_definition) {
       // Avoid name collisions in the rules state: provided variables can be

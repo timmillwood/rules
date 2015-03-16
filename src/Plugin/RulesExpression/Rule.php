@@ -17,7 +17,7 @@ use Drupal\rules\Engine\ActionExpressionInterface;
 use Drupal\rules\Engine\ConditionExpressionInterface;
 use Drupal\rules\Engine\ExpressionInterface;
 use Drupal\rules\Engine\RulesExpressionTrait;
-use Drupal\rules\Engine\RulesState;
+use Drupal\rules\Engine\ExecutionState;
 use Drupal\rules\Exception\InvalidExpressionException;
 use Drupal\rules\Engine\ExpressionPluginManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -66,8 +66,8 @@ class Rule extends RulesActionBase implements RuleInterface, ContainerFactoryPlu
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, ExpressionPluginManager $expression_manager) {
     // @todo: This needs to be removed again and we need to add proper derivative handling for Rules.
-    if (isset($configuration['context_definitions'])) {
-      $plugin_definition['context'] = $this->createContextDefinitions($configuration['context_definitions']);
+    if (isset($configuration['context'])) {
+      $plugin_definition['context'] = $this->createContextDefinitions($configuration['context']);
     }
 
     parent::__construct($configuration, $plugin_id, $plugin_definition);
@@ -128,7 +128,7 @@ class Rule extends RulesActionBase implements RuleInterface, ContainerFactoryPlu
   /**
    * {@inheritdoc}
    */
-  public function executeWithState(RulesState $state) {
+  public function executeWithState(ExecutionState $state) {
     // Evaluate the rule's conditions.
     if (!$this->conditions->executeWithState($state)) {
       // Do not run the actions if the conditions are not met.

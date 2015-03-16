@@ -12,7 +12,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\rules\Core\RulesConditionBase;
 use Drupal\rules\Engine\ConditionExpressionInterface;
 use Drupal\rules\Engine\RulesExpressionTrait;
-use Drupal\rules\Engine\RulesState;
+use Drupal\rules\Engine\ExecutionState;
 use Drupal\rules\Context\DataProcessorManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -101,7 +101,7 @@ class RulesCondition extends RulesConditionBase implements ConditionExpressionIn
   /**
    * {@inheritdoc}
    */
-  public function executeWithState(RulesState $state) {
+  public function executeWithState(ExecutionState $state) {
     $condition = $this->conditionManager->createInstance($this->configuration['condition_id'], [
       'negate' => $this->configuration['negate'],
     ]);
@@ -128,7 +128,7 @@ class RulesCondition extends RulesConditionBase implements ConditionExpressionIn
    */
   public function evaluate() {
     $contexts = $this->getContexts();
-    $state = new RulesState($contexts);
+    $state = new ExecutionState($contexts);
     return $this->executeWithState($state);
   }
 

@@ -35,14 +35,14 @@ class ExpressionPluginManager extends DefaultPluginManager {
   /**
    * Creates a new rule.
    *
-   * @param array $configuration
-   *   The configuration array to create the plugin instance with.
+   * @param \Drupal\rules\Engine\ExecutionStateDefinition $state_definition
+   *   The definition of the expression's execution state.
    *
    * @return \Drupal\rules\Plugin\RulesExpression\RuleInterface
    *   The created rule.
    */
-  public function createRule(array $configuration = []) {
-    return $this->createInstance('rules_rule', $configuration);
+  public function createRule(ExecutionStateDefinition $state_definition = NULL) {
+    return $this->createInstance('rules_rule', $state_definition ? $state_definition->toArray() : []);
   }
 
   /**
@@ -78,21 +78,27 @@ class ExpressionPluginManager extends DefaultPluginManager {
   /**
    * Creates a new 'and' condition container.
    *
+   * @param \Drupal\rules\Engine\ExecutionStateDefinition $state_definition
+   *   The definition of the expression's execution state.
+   *
    * @return \Drupal\rules\Engine\ConditionExpressionContainerInterface
    *   The created 'and' condition container.
    */
-  public function createAnd() {
-    return $this->createInstance('rules_and');
+  public function createAnd(ExecutionStateDefinition $state_definition = NULL) {
+    return $this->createInstance('rules_and', $state_definition ? $state_definition->toArray() : []);
   }
 
   /**
    * Creates a new 'or' condition container.
    *
+   * @param \Drupal\rules\Engine\ExecutionStateDefinition $state_definition
+   *   The definition of the expression's execution state.
+   *
    * @return \Drupal\rules\Engine\ConditionExpressionContainerInterface
    *   The created 'or' condition container.
    */
-  public function createOr() {
-    return $this->createInstance('rules_or');
+  public function createOr(ExecutionStateDefinition $state_definition = NULL) {
+    return $this->createInstance('rules_or', $state_definition ? $state_definition->toArray() : []);
   }
 
 }

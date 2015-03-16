@@ -61,7 +61,7 @@ rules_component.configuration.rules_rule:
     id:
       type: string
       label: 'Plugin ID'
-    context_definitions:
+    context:
       type: sequence
       label: 'Context definitions'
       sequence:

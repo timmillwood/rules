@@ -8,8 +8,9 @@
 namespace Drupal\rules\Tests;
 
 use Drupal\rules\Context\ContextConfig;
+use Drupal\rules\Engine\ExecutionStateDefinition;
 use Drupal\rules\Engine\RulesLog;
-use Drupal\rules\Engine\RulesState;
+use Drupal\rules\Engine\ExecutionState;
 
 /**
  * Test using the Rules API to create and evaluate rules.
@@ -76,14 +77,10 @@ class RulesEngineTest extends RulesDrupalTestBase {
    * Tests passing a string context to a condition.
    */
   public function testContextPassing() {
-    $rule = $this->expressionManager->createRule([
-      'context_definitions' => [
-        'test' => [
-          'type' => 'string',
-          'label' => 'Test string',
-        ],
-      ],
-    ]);
+    $rule = $this->expressionManager->createRule(ExecutionStateDefinition::create()
+      ->setContextDefinition('test', ContextDefinition::create('string')
+        ->setLabel('Test string')
+    ));
 
     $rule->addCondition('rules_test_string_condition', ContextConfig::create()
       ->map('text', 'test')
@@ -130,7 +127,7 @@ class RulesEngineTest extends RulesDrupalTestBase {
       ->provideAs('provided_text', 'newname')
     );
 
-    $state = new RulesState();
+    $state = new ExecutionState();
     $rule->executeWithState($state);
 
     // Check that the newly named variable exists and has the provided value.
@@ -160,7 +157,7 @@ class RulesEngineTest extends RulesDrupalTestBase {
       ->provideAs('concatenated', 'concatenated2')
     );
 
-    $state = new RulesState();
+    $state = new ExecutionState();
     $rule->executeWithState($state);
 
     // Check that the created variables exists and have the provided values.

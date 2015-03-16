@@ -961,7 +961,7 @@ class RulesTestDataCase extends DrupalWebTestCase {
    */
   function testDataSaving() {
     $node = $this->drupalCreateNode();
-    $state = new RulesState(rule());
+    $state = new ExecutionState(rule());
     $state->addVariable('node', $node, array('type' => 'node'));
     $wrapper = $state->get('node');
     $node->title = 'test';
