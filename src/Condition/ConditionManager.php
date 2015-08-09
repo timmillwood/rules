@@ -2,22 +2,29 @@
 
 /**
  * @file
- * Contains \Drupal\rules\Plugin\Condition\ConditionManager.
+ * Contains \Drupal\rules\Condition\ConditionManager.
  */
 
-namespace Drupal\rules\Plugin\Condition;
+namespace Drupal\rules\Condition;
 
-use Drupal\Core\Cache\CacheBackendInterface;
-use Drupal\Core\Condition\ConditionManager as CoreConditinManager;
-use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Condition\ConditionManager as CoreConditionManager;
+use Drupal\Core\Plugin\Discovery\ContainerDerivativeDiscoveryDecorator;
+use Drupal\rules\Context\AnnotatedClassDiscovery;
 
 /**
  * Extends the core condition manager to add in Rules' context improvements.
  */
-class ConditionManager extends CoreConditinManager {
+class ConditionManager extends CoreConditionManager {
 
-  public function __construct(\Traversable $namespaces, CacheBackendInterface $cache_backend, ModuleHandlerInterface $module_handler) {
-    get_parent_class(get_parent_class($thing));
+  /**
+   * {@inheritdoc}
+   */
+  protected function getDiscovery() {
+    if (!$this->discovery) {
+      $discovery = new AnnotatedClassDiscovery($this->subdir, $this->namespaces, $this->pluginDefinitionAnnotationName);
+      $this->discovery = new ContainerDerivativeDiscoveryDecorator($discovery);
+    }
+    return $this->discovery;
+  }
 
-    parent::__construct($namespaces, $cache_backend, $module_handler);
 }
