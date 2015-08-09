@@ -21,6 +21,8 @@ class ConditionManager extends CoreConditionManager {
    */
   protected function getDiscovery() {
     if (!$this->discovery) {
+      // Swap out the annotated class discovery used, so we can control the
+      // annotation classes picked.
       $discovery = new AnnotatedClassDiscovery($this->subdir, $this->namespaces, $this->pluginDefinitionAnnotationName);
       $this->discovery = new ContainerDerivativeDiscoveryDecorator($discovery);
     }
