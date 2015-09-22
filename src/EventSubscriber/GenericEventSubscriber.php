@@ -87,8 +87,14 @@ class GenericEventSubscriber implements EventSubscriberInterface {
         // If this is a GenericEvent get the context for the rule from the event
         // arguments.
         if ($event instanceof GenericEvent) {
-          $reaction_rule->setContextValue($context_name, $event->getArgument($context_name));
+          $value = $event->getArgument($context_name);
         }
+        // Else there must be a getter method or public property.
+        // @todo: Add support for the getter method.
+        else {
+          $value = $event->$context_name;
+        }
+        $reaction_rule->setContextValue($context_name, $value);
       }
 
       $reaction_rule->execute();
